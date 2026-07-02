@@ -14,15 +14,16 @@ function ProjectsTable({
   setViewMode,
   setDeleteOpen,
 }) {
+  // Filter projects
   const filteredProjects = projects.filter((project) =>
-    project.name.toLowerCase().includes(search.toLowerCase()),
+    project.name?.toLowerCase().includes(search.trim().toLowerCase()),
   );
 
   const columns = [
     {
       field: "id",
       headerName: "ID",
-      width: 70,
+      width: 90,
     },
     {
       field: "name",
@@ -41,6 +42,7 @@ function ProjectsTable({
       renderCell: (params) => (
         <Chip
           label={params.value}
+          size="small"
           color={
             params.value === "Completed"
               ? "success"
@@ -48,7 +50,6 @@ function ProjectsTable({
                 ? "warning"
                 : "primary"
           }
-          size="small"
         />
       ),
     },
@@ -57,6 +58,7 @@ function ProjectsTable({
       headerName: "Actions",
       width: 170,
       sortable: false,
+      filterable: false,
       renderCell: (params) => (
         <>
           {/* View */}
@@ -101,17 +103,24 @@ function ProjectsTable({
   ];
 
   return (
-    <div
-      style={{
-        height: 500,
-        width: "100%",
-      }}
-    >
+    <div style={{ height: 500, width: "100%" }}>
       <DataGrid
         rows={filteredProjects}
         columns={columns}
-        pageSizeOptions={[5]}
+        getRowId={(row) => row.id}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              page: 0,
+              pageSize: 5,
+            },
+          },
+        }}
+        pageSizeOptions={[5, 10]}
         disableRowSelectionOnClick
+        localeText={{
+          noRowsLabel: "No projects found",
+        }}
       />
     </div>
   );
