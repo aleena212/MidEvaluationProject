@@ -28,15 +28,18 @@ function FormMultiSelect({
           <InputLabel>{label}</InputLabel>
 
           <Select
-            {...field}
             multiple
             label={label}
             disabled={disabled}
+            value={field.value || []}
+            onChange={(event) => field.onChange(event.target.value)}
+            onBlur={field.onBlur}
+            inputRef={field.ref}
             renderValue={(selected) => selected.join(", ")}
           >
             {options.map((option) => (
               <MenuItem key={option} value={option}>
-                <Checkbox checked={field.value.includes(option)} />
+                <Checkbox checked={(field.value || []).includes(option)} />
 
                 <ListItemText primary={option} />
               </MenuItem>

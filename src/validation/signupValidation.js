@@ -16,10 +16,10 @@ const signupValidation = yup.object({
     .string()
     .required("Password is required")
     .min(8, "Password must be at least 8 characters")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/,
-      "Must contain uppercase, lowercase and a number",
-    ),
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/, {
+      message: "Must contain uppercase, lowercase and a number",
+      excludeEmptyString: true,
+    }),
 
   confirmPassword: yup
     .string()

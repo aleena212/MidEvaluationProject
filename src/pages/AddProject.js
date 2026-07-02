@@ -1,10 +1,11 @@
-import { Typography, Box } from "@mui/material";
+import Layout from "../components/common/Layout";
+import AddProjectStepper from "../components/project/AddProjectStepper";
 
 function AddProject() {
   return (
-    <Box p={4}>
-      <Typography variant="h4">Add Project</Typography>
-    </Box>
+    <Layout>
+      <AddProjectStepper />
+    </Layout>
   );
 }
 

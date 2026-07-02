@@ -1,31 +1,39 @@
 import { Box, Typography, Button, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Layout from "../components/common/Layout";
 import ProjectsTable from "../components/project/ProjectsTable";
-import ProjectForm from "../components/project/ProjectForm";
 import DeleteDialog from "../components/project/DeleteDialog";
 
 function Projects() {
+  const navigate = useNavigate();
+
   const [projects, setProjects] = useState([]);
 
   const [search, setSearch] = useState("");
 
-  const [open, setOpen] = useState(false);
-
   const [selectedProject, setSelectedProject] = useState(null);
 
-  const [editMode, setEditMode] = useState(false);
-
-  const [viewMode, setViewMode] = useState(false);
-
-  // We'll use this later
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  // Load projects whenever this page opens
+  useEffect(() => {
+    loadProjects();
+  }, []);
+
+  const loadProjects = () => {
+    const savedProjects = JSON.parse(localStorage.getItem("projects")) || [];
+
+    setProjects(savedProjects);
+  };
 
   return (
     <Layout>
       {/* Header */}
+
       <Box
         sx={{
           display: "flex",
@@ -41,57 +49,40 @@ function Projects() {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={() => {
-            setSelectedProject(null);
-            setEditMode(false);
-            setViewMode(false);
-            setOpen(true);
-          }}
+          onClick={() => navigate("/projects/new")}
         >
           Add Project
         </Button>
       </Box>
 
       {/* Search */}
+
       <TextField
         fullWidth
-        label="Search Project"
+        placeholder="Search by project title..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         sx={{ mb: 3 }}
       />
 
       {/* Table */}
+
       <ProjectsTable
         projects={projects}
         search={search}
-        setOpen={setOpen}
         setSelectedProject={setSelectedProject}
-        setEditMode={setEditMode}
-        setViewMode={setViewMode}
         setDeleteOpen={setDeleteOpen}
       />
 
-      {/* Form */}
-      <ProjectForm
-        open={open}
-        setOpen={setOpen}
+      {/* Delete */}
+
+      <DeleteDialog
+        open={deleteOpen}
+        setOpen={setDeleteOpen}
         projects={projects}
         setProjects={setProjects}
         selectedProject={selectedProject}
-        editMode={editMode}
-        viewMode={viewMode}
       />
-
-      {
-        <DeleteDialog
-          open={deleteOpen}
-          setOpen={setDeleteOpen}
-          projects={projects}
-          setProjects={setProjects}
-          selectedProject={selectedProject}
-        />
-      }
     </Layout>
   );
 }

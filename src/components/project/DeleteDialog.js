@@ -15,28 +15,34 @@ function DeleteDialog({
   selectedProject,
 }) {
   const handleDelete = () => {
-    setProjects(
-      projects.filter((project) => project.id !== selectedProject.id),
+    const updatedProjects = projects.filter(
+      (project) => project.id !== selectedProject.id,
     );
+
+    // Update React State
+    setProjects(updatedProjects);
+
+    // Update Local Storage
+    localStorage.setItem("projects", JSON.stringify(updatedProjects));
 
     setOpen(false);
   };
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
       <DialogTitle color="error">Delete Project</DialogTitle>
 
       <DialogContent>
         <DialogContentText>
           Are you sure you want to delete{" "}
-          <strong>{selectedProject?.name}</strong>?
+          <strong>{selectedProject?.title}</strong>?
         </DialogContentText>
       </DialogContent>
 
       <DialogActions>
         <Button onClick={() => setOpen(false)}>Cancel</Button>
 
-        <Button color="error" variant="contained" onClick={handleDelete}>
+        <Button variant="contained" color="error" onClick={handleDelete}>
           Delete
         </Button>
       </DialogActions>

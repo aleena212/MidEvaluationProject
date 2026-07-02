@@ -21,15 +21,20 @@ function Layout({ children }) {
         component="main"
         sx={{
           flexGrow: 1,
+          width: `calc(100% - ${open ? drawerWidth : collapsedWidth}px)`,
           mt: "64px",
-          ml: open ? `${drawerWidth}px` : `${collapsedWidth}px`,
-          p: 4,
+          ml: 0,
+
+          pl: 1,
+          pr: 2,
+          py: 2,
           minHeight: "100vh",
           backgroundColor: "#F8F5FF",
-          transition: "all 0.3s ease",
+
+          transition: "margin-left 0.3s ease",
         }}
       >
-        {/* Breadcrumb Navigation */}
+        {/* Breadcrumb */}
         <BreadcrumbsComponent />
 
         {/* Page Content */}

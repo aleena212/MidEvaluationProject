@@ -10,10 +10,11 @@ const loginValidation = yup.object({
     .string()
     .required("Password is required")
     .min(8, "Password must be at least 8 characters")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/,
-      "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-    ),
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/, {
+      message:
+        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+      excludeEmptyString: true,
+    }),
 });
 
 export default loginValidation;

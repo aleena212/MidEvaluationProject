@@ -5,18 +5,19 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { useNavigate } from "react-router-dom";
+
 function ProjectsTable({
   projects,
   search,
-  setOpen,
   setSelectedProject,
-  setEditMode,
-  setViewMode,
   setDeleteOpen,
 }) {
-  // Filter projects
+  const navigate = useNavigate();
+
+  // Search by Project Title
   const filteredProjects = projects.filter((project) =>
-    project.name?.toLowerCase().includes(search.trim().toLowerCase()),
+    project.title?.toLowerCase().includes(search.toLowerCase().trim()),
   );
 
   const columns = [
@@ -26,8 +27,8 @@ function ProjectsTable({
       width: 90,
     },
     {
-      field: "name",
-      headerName: "Project Name",
+      field: "title",
+      headerName: "Project Title",
       flex: 1,
     },
     {
@@ -39,6 +40,7 @@ function ProjectsTable({
       field: "status",
       headerName: "Status",
       flex: 1,
+
       renderCell: (params) => (
         <Chip
           label={params.value}
@@ -46,7 +48,7 @@ function ProjectsTable({
           color={
             params.value === "Completed"
               ? "success"
-              : params.value === "Pending"
+              : params.value === "On Hold"
                 ? "warning"
                 : "primary"
           }
@@ -59,35 +61,29 @@ function ProjectsTable({
       width: 170,
       sortable: false,
       filterable: false,
+
       renderCell: (params) => (
         <>
           {/* View */}
+
           <IconButton
             color="primary"
-            onClick={() => {
-              setSelectedProject(params.row);
-              setViewMode(true);
-              setEditMode(false);
-              setOpen(true);
-            }}
+            onClick={() => navigate(`/project-details/${params.row.id}`)}
           >
             <VisibilityIcon />
           </IconButton>
 
           {/* Edit */}
+
           <IconButton
             color="success"
-            onClick={() => {
-              setSelectedProject(params.row);
-              setEditMode(true);
-              setViewMode(false);
-              setOpen(true);
-            }}
+            onClick={() => navigate(`/projects/edit/${params.row.id}`)}
           >
             <EditIcon />
           </IconButton>
 
           {/* Delete */}
+
           <IconButton
             color="error"
             onClick={() => {
@@ -103,11 +99,18 @@ function ProjectsTable({
   ];
 
   return (
-    <div style={{ height: 500, width: "100%" }}>
+    <div
+      style={{
+        height: 520,
+        width: "100%",
+      }}
+    >
       <DataGrid
         rows={filteredProjects}
         columns={columns}
         getRowId={(row) => row.id}
+        disableRowSelectionOnClick
+        pageSizeOptions={[5, 10]}
         initialState={{
           pagination: {
             paginationModel: {
@@ -116,10 +119,8 @@ function ProjectsTable({
             },
           },
         }}
-        pageSizeOptions={[5, 10]}
-        disableRowSelectionOnClick
         localeText={{
-          noRowsLabel: "No projects found",
+          noRowsLabel: "No Projects Found",
         }}
       />
     </div>

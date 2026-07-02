@@ -22,6 +22,9 @@ function Navbar({ open, setOpen }) {
         backgroundColor: "#8E44AD",
         width: `calc(100% - ${open ? drawerWidth : collapsedWidth}px)`,
         ml: `${open ? drawerWidth : collapsedWidth}px`,
+        mt: 0,
+        borderRadius: 0,
+        boxShadow: 2,
         transition: "all 0.3s ease",
       }}
     >
